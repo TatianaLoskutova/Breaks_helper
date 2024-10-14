@@ -12,13 +12,34 @@ from organisations.serializers.api import employees as employees_s
 
 
 @extend_schema_view(
-    list=extend_schema(summary='Список сотрудников организации', tags=['Организации: Сотрудники']),
-    retrieve=extend_schema(summary='Деталка сотрудника организации', tags=['Организации: Сотрудники']),
-    create=extend_schema(summary='Создать сотрудника организации', tags=['Организации: Сотрудники']),
-    update=extend_schema(summary='Изменить сотрудника организации', tags=['Организации: Сотрудники']),
-    partial_update=extend_schema(summary='Изменить сотрудника организации частично', tags=['Организации: Сотрудники']),
-    destroy=extend_schema(summary='Удалить сотрудника из организации', tags=['Организации: Сотрудники']),
-    search=extend_schema(filters=True, summary='Список сотрудников организации Search', tags=['Словари']),
+    list=extend_schema(
+        summary='Список сотрудников организации',
+        tags=['Организации: Сотрудники']
+        ),
+    retrieve=extend_schema(
+        summary='Деталка сотрудника организации',
+        tags=['Организации: Сотрудники']
+        ),
+    create=extend_schema(
+        summary='Создать сотрудника организации',
+        tags=['Организации: Сотрудники']
+        ),
+    update=extend_schema(
+        summary='Изменить сотрудника организации',
+        tags=['Организации: Сотрудники']
+        ),
+    partial_update=extend_schema(
+        summary='Изменить сотрудника организации частично',
+        tags=['Организации: Сотрудники']
+        ),
+    destroy=extend_schema(
+        summary='Удалить сотрудника из организации',
+        tags=['Организации: Сотрудники']
+        ),
+    search=extend_schema(
+        filters=True, summary='Список сотрудников организации Search',
+        tags=['Словари']
+        ),
 )
 class EmployeeView(LCRUDViewSet):
     permission_classes = [IsColleagues]

@@ -22,7 +22,6 @@ from breaks.serializers.nested.replacements import \
 from common.serializers.mixins import DictMixinSerializer, InfoModelSerializer
 from organisations.models.groups import Group, Member
 from organisations.serializers.nested.groups import GroupShortSerializer
-from users.models.users import User
 
 
 class ReplacementListSerializer(InfoModelSerializer):
@@ -158,42 +157,35 @@ class ReplacementCreateSerializer(InfoModelSerializer):
             'min_active': {'required': False, 'allow_null': True},
         }
 
-    def create(self, validated_data):
-        remember_data = validated_data.pop('remember_default_data', False)
-        all_group_members = validated_data.pop('all_group_members', False)
-
-        with transaction.atomic():
-            if hasattr(validated_data['group'], 'breaks_info'):
-                validated_data['group'] = validated_data['group'].breaks_info
-            else:
-                validated_data['group'] = GroupInfo.objects.create(
-                    group=validated_data['group'],
-                )
-
-            if all_group_members:
-                validated_data.pop('members', list())
-                members = validated_data['group'].group.members_info.all()
-            else:
-                members = validated_data.pop('members')
-            instance = super().create(validated_data)
-
-            instance.members.set(
-                members, through_defaults={'status_id': 'offline'}
+    def validate_group(self, value):
+        my_groups = Group.objects.my_groups_admin()
+        if value not in my_groups:
+            raise ParseError(
+                'У вас нет полномочий создавать смены в этой группе.'
             )
+        return value
 
-            if remember_data:
-                defaults = {
-                    'break_start': validated_data['break_start'],
-                    'break_end': validated_data['break_end'],
-                    'break_max_duration': validated_data['break_max_duration'],
-                    'min_active': validated_data['min_active'],
-                }
-                group = instance.group
-                for key, value in defaults.items():
-                    setattr(group, key, value)
-                group.save()
+    def validate_date(self, value):
+        now = timezone.now().date()
+        if value < now:
+            raise ParseError(
+                'Дата смены должна быть больше или равна текущей дате.'
+            )
+        return value
 
-            return instance
+    def validate_break_start(self, value):
+        if value.minute % 15 > 0:
+            raise ParseError(
+                'Время начала перерыва должно быть кратно 15 минутам.'
+            )
+        return value
+
+    def validate_break_end(self, value):
+        if value.minute % 15 > 0:
+            raise ParseError(
+                'Время окончания перерыва должно быть кратно 15 минутам.'
+            )
+        return value
 
     def validate(self, attrs):
 
@@ -234,36 +226,42 @@ class ReplacementCreateSerializer(InfoModelSerializer):
             )
         return attrs
 
-    def validate_group(self, value):
-        my_groups = Group.objects.my_groups_admin()
-        if value not in my_groups:
-            raise ParseError(
-                'У вас нет полномочий создавать смены в этой группе.'
-            )
-        return value
+    def create(self, validated_data):
+        remember_data = validated_data.pop('remember_default_data', False)
+        all_group_members = validated_data.pop('all_group_members', False)
 
-    def validate_date(self, value):
-        now = timezone.now().date()
-        if value < now:
-            raise ParseError(
-                'Дата смены должна быть больше или равна текущей дате.'
-            )
-        return value
+        with transaction.atomic():
+            if hasattr(validated_data['group'], 'breaks_info'):
+                validated_data['group'] = validated_data['group'].breaks_info
+            else:
+                validated_data['group'] = GroupInfo.objects.create(
+                    group=validated_data['group'],
+                )
 
-    def validate_break_start(self, value):
-        if value.minute % 15 > 0:
-            raise ParseError(
-                'Время начала перерыва должно быть кратно 15 минутам.'
-            )
-        return value
+            if all_group_members:
+                validated_data.pop('members', list())
+                members = validated_data['group'].group.members_info.all()
+            else:
+                members = validated_data.pop('members')
+            instance = super().create(validated_data)
 
-    def validate_break_end(self, value):
-        if value.minute % 15 > 0:
-            raise ParseError(
-                'Время окончания перерыва должно быть кратно 15 минутам.'
+            instance.members.set(
+                members, through_defaults={'status_id': 'offline'}
             )
-        return value
 
+            if remember_data:
+                defaults = {
+                    'break_start': validated_data['break_start'],
+                    'break_end': validated_data['break_end'],
+                    'break_max_duration': validated_data['break_max_duration'],
+                    'min_active': validated_data['min_active'],
+                }
+                group = instance.group
+                for key, value in defaults.items():
+                    setattr(group, key, value)
+                group.save()
+
+            return instance
 
 class ReplacementUpdateSerializer(InfoModelSerializer):
     members = serializers.PrimaryKeyRelatedField(

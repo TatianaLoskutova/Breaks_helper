@@ -1,10 +1,10 @@
-from auditlog.registry import auditlog
+# from auditlog.registry import auditlog
 from django.db import models
 from django.utils import timezone
-from organisations.constants import (DIRECTOR_POSITION, MANAGER_POSITION,
-                                     OPERATOR_POSITION)
 
 from common.models.mixins import InfoMixin
+from organisations.constants import (DIRECTOR_POSITION, MANAGER_POSITION,
+                                     OPERATOR_POSITION)
 from users.models.users import User
 
 
@@ -75,4 +75,4 @@ class Employee(models.Model):
         return False
 
 
-auditlog.register(Organisation)
+# auditlog.register(Organisation)

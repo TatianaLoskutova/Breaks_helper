@@ -1,5 +1,6 @@
-from breaks.models.replacements import GroupInfo
 from django.contrib import admin
+
+from breaks.models.replacements import GroupInfo
 from organisations.models import dicts, groups, offers, organisations
 
 
