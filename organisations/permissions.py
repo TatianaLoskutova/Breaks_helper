@@ -20,7 +20,7 @@ class IsMyOrganisation(IsAuthenticated):
         return False
 
 
-class IsColleagues(IsMyOrganisation):
+class IsColleagues(IsAuthenticated):
     def has_object_permission(self, request, view, obj):
         if obj.organisation.director == request.user:
             return True
@@ -30,7 +30,7 @@ class IsColleagues(IsMyOrganisation):
         return False
 
 
-class IsMembers(IsMyOrganisation):
+class IsMembers(IsAuthenticated):
     def has_object_permission(self, request, view, obj):
         if (
             obj.group.organisation.director == request.user

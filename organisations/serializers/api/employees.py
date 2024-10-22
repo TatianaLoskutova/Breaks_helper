@@ -1,13 +1,13 @@
 from crum import get_current_user
 from django.db import transaction
-from organisations.constants import OPERATOR_POSITION
-from organisations.models.dicts import Position
-from organisations.models.organisations import Employee, Organisation
-from organisations.serializers.nested.dicts import PositionShortSerializer
 from rest_framework import serializers
 from rest_framework.exceptions import ParseError
 
 from common.serializers.mixins import ExtendedModelSerializer
+from organisations.constants import OPERATOR_POSITION
+from organisations.models.dicts import Position
+from organisations.models.organisations import Employee, Organisation
+from organisations.serializers.nested.dicts import PositionShortSerializer
 from users.models.users import User
 from users.serializers.nested.users import UserEmployeeSerializer
 
@@ -116,13 +116,6 @@ class EmployeeUpdateSerializer(ExtendedModelSerializer):
             'position',
         )
 
-    def validate(self, attrs):
-        if self.instance.is_director:
-            raise ParseError(
-                'Руководитель организации недоступен для изменений.'
-            )
-        return attrs
-
     def validate_position(self, value):
         if value.code == OPERATOR_POSITION:
             if self.instance.is_manager:
@@ -134,6 +127,14 @@ class EmployeeUpdateSerializer(ExtendedModelSerializer):
                         f'менеджером в следующих группах:  {error_group_text}.'
                     )
         return value
+
+    def validate(self, attrs):
+        if self.instance.is_director:
+            raise ParseError(
+                'Руководитель организации недоступен для изменений.'
+            )
+        return attrs
+
 
 
 class EmployeeDeleteSerializer(serializers.Serializer):

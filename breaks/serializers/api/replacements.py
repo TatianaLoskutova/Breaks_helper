@@ -263,6 +263,7 @@ class ReplacementCreateSerializer(InfoModelSerializer):
 
             return instance
 
+
 class ReplacementUpdateSerializer(InfoModelSerializer):
     members = serializers.PrimaryKeyRelatedField(
         queryset=Member.objects.all(), many=True, allow_null=True,
@@ -284,6 +285,48 @@ class ReplacementUpdateSerializer(InfoModelSerializer):
             'all_group_members',
             'remember_default_data',
         )
+
+    def validate_date(self, value):
+        now = timezone.now().date()
+        if value < now:
+            raise ParseError(
+                'Дата смены должна быть больше или равна текущей дате.'
+            )
+        return value
+
+    def validate_break_start(self, value):
+        if value.minute % 15 > 0:
+            raise ParseError(
+                'Время начала перерыва должно быть кратно 15 минутам.'
+            )
+        return value
+
+    def validate_break_end(self, value):
+        if value.minute % 15 > 0:
+            raise ParseError(
+                'Время окончания перерыва должно быть кратно 15 минутам.'
+            )
+        return value
+
+    def validate(self, attrs):
+        # Check times
+
+        if attrs.get('break_start') or attrs.get('break_end'):
+            break_start = attrs.get('break_start') or self.instance.break_start
+            break_end = attrs.get('break_end') or self.instance.break_end
+            if break_start >= break_end:
+                raise ParseError(
+                    'Время начала перерыва должно быть меньше времени окончания.'
+                )
+
+        # Check duplicates
+        if attrs.get('date') and self.Meta.model.objects.filter(
+                group_id=self.instance.group.pk, date=attrs['date']
+        ).exclude(pk=self.instance.pk).exists():
+            raise ParseError(
+                'На этот день уже существует активная смена.'
+            )
+        return attrs
 
     def update(self, instance, validated_data):
         remember_data = validated_data.pop('remember_default_data', False)
@@ -327,48 +370,6 @@ class ReplacementUpdateSerializer(InfoModelSerializer):
                 group.save()
 
             return instance
-
-    def validate(self, attrs):
-        # Check times
-
-        if attrs.get('break_start') or attrs.get('break_end'):
-            break_start = attrs.get('break_start') or self.instance.break_start
-            break_end = attrs.get('break_end') or self.instance.break_end
-            if break_start >= break_end:
-                raise ParseError(
-                    'Время начала перерыва должно быть меньше времени окончания.'
-                )
-
-        # Check duplicates
-        if attrs.get('date') and self.Meta.model.objects.filter(
-                group_id=self.instance.group.pk, date=attrs['date']
-        ).exclude(pk=self.instance.pk).exists():
-            raise ParseError(
-                'На этот день уже существует активная смена.'
-            )
-        return attrs
-
-    def validate_date(self, value):
-        now = timezone.now().date()
-        if value < now:
-            raise ParseError(
-                'Дата смены должна быть больше или равна текущей дате.'
-            )
-        return value
-
-    def validate_break_start(self, value):
-        if value.minute % 15 > 0:
-            raise ParseError(
-                'Время начала перерыва должно быть кратно 15 минутам.'
-            )
-        return value
-
-    def validate_break_end(self, value):
-        if value.minute % 15 > 0:
-            raise ParseError(
-                'Время окончания перерыва должно быть кратно 15 минутам.'
-            )
-        return value
 
 
 class ReplacementMemberListSerializer(InfoModelSerializer):
