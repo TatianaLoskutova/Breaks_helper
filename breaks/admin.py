@@ -11,13 +11,7 @@ from breaks.models import breaks, dicts, replacements
 ##############################
 class ReplacementMemberInline(TabularInline):
     model = replacements.ReplacementMember
-    fields = (
-        'member', 'status',
-        'time_online', 'time_offline', 'time_break_start', 'time_break_end',
-    )
-    readonly_fields = (
-        'time_online', 'time_offline', 'time_break_start', 'time_break_end',
-    )
+    fields = ('member', 'status',)
 
 
 ##############################
@@ -30,32 +24,35 @@ class ReplacementStatusAdmin(admin.ModelAdmin):
     )
 
 
+@admin.register(dicts.BreakStatus)
+class BreakStatusAdmin(admin.ModelAdmin):
+    list_display = (
+        'code', 'name', 'sort', 'is_active',
+    )
+
+
 @admin.register(replacements.Replacement)
 class ReplacementAdmin(admin.ModelAdmin):
     list_display = (
-        'id', 'group', 'date', 'break_start', 'break_end', 'break_max_duration',
+        'id', 'group', 'date', 'break_start', 'break_end',
+        'break_max_duration',
     )
     inlines = (
         ReplacementMemberInline,
-    )
-    readonly_fields = (
-        'created_at', 'created_by', 'updated_at', 'updated_by',
     )
 
 
 @admin.register(breaks.Break)
 class BreakAdmin(admin.ModelAdmin):
     list_display = (
-        'id', 'replacement_link', 'break_start', 'break_end',
+        'id', 'replacement_link', 'break_start', 'break_end', 'status',
     )
+    list_filter = ('status',)
     empty_value_display = 'Unknown'
+    radio_fields = {'status': admin.VERTICAL}
 
     def replacement_link(self, obj):
         link = reverse(
             'admin:breaks_replacement_change', args=[obj.replacement.id]
         )
         return format_html('<a href="{}">{}</a>', link, obj.replacement)
-
-
-
-# Register your models here.

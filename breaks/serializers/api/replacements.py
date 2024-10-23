@@ -1,24 +1,22 @@
-import datetime
-from datetime import timedelta
+# import datetime
+# from datetime import timedelta
 
-from crum import get_current_user
+# from crum import get_current_user
 from django.db import transaction
-from django.db.models import Count, Q
+# from django.db.models import Count, Q
 from django.utils import timezone
 from rest_framework import serializers
 from rest_framework.exceptions import ParseError
 
-from breaks.constants import (REPLACEMENT_MEMBER_BREAK,
-                              REPLACEMENT_MEMBER_BUSY,
-                              REPLACEMENT_MEMBER_OFFLINE,
-                              REPLACEMENT_MEMBER_ONLINE)
+# from breaks.constants import (REPLACEMENT_MEMBER_BREAK,
+#                               REPLACEMENT_MEMBER_BUSY,
+#                               REPLACEMENT_MEMBER_OFFLINE,
+#                               REPLACEMENT_MEMBER_ONLINE)
 from breaks.models.replacements import (GroupInfo, Replacement,
                                         ReplacementMember)
-from breaks.serializers.internal.replacements import (
-    ReplacementBreakSerializer, ReplacementGeneralSerializer,
-    ReplacementPersonalStatsSerializer)
-from breaks.serializers.nested.replacements import \
-    ReplacementMemberShortSerializer
+from breaks.serializers.internal.replacements import ReplacementStatsSerializer
+# from breaks.serializers.nested.replacements import \
+#     ReplacementMemberShortSerializer
 from common.serializers.mixins import DictMixinSerializer, InfoModelSerializer
 from organisations.models.groups import Group, Member
 from organisations.serializers.nested.groups import GroupShortSerializer
@@ -26,28 +24,7 @@ from organisations.serializers.nested.groups import GroupShortSerializer
 
 class ReplacementListSerializer(InfoModelSerializer):
     group = GroupShortSerializer(source='group.group')
-
-    class Meta:
-        model = Replacement
-        fields = (
-            'id',
-            'group',
-            'date',
-            'break_start',
-            'break_end',
-            'break_max_duration',
-            'min_active',
-        )
-
-
-class ReplacementRetrieveSerializer(InfoModelSerializer):
-
-    stats = serializers.SerializerMethodField()
-    general = ReplacementGeneralSerializer(source='*')
-    personal_stats = serializers.SerializerMethodField()
-    breaks = ReplacementBreakSerializer(source='*')
-    actions = serializers.SerializerMethodField()
-    members = ReplacementMemberShortSerializer(source='members_info', many=True)
+    stats = ReplacementStatsSerializer(source='*')
 
     class Meta:
         model = Replacement
@@ -60,70 +37,93 @@ class ReplacementRetrieveSerializer(InfoModelSerializer):
             'break_max_duration',
             'min_active',
             'stats',
-            'personal_stats',
-            'breaks',
-            'actions',
-            'members',
-            'general',
         )
 
-    def get_personal_stats(self, instance):
-        user = get_current_user()
-        member = instance.get_member_by_user(user)
-        return ReplacementPersonalStatsSerializer(member, allow_null=True).data
 
-    def get_stats(self, instance):
-        result = self.Meta.model.objects.filter(pk=instance.pk).aggregate(
-            members_count=Count('members', distinct=True),
-            breaks_count=Count('breaks', distinct=True),
-            members_online=Count('members', filter=Q(members_info__status_id=REPLACEMENT_MEMBER_ONLINE), distinct=True),
-            members_offline=Count('members', filter=Q(members_info__status_id=REPLACEMENT_MEMBER_OFFLINE), distinct=True),
-            members_busy=Count('members', filter=Q(members_info__status_id=REPLACEMENT_MEMBER_BUSY), distinct=True),
-            members_break=Count('members', filter=Q(members_info__status_id=REPLACEMENT_MEMBER_BREAK), distinct=True),
+class ReplacementRetrieveSerializer(InfoModelSerializer):
+    group = GroupShortSerializer(source='group.group')
+    stats = serializers.SerializerMethodField()
+    # general = ReplacementGeneralSerializer(source='*')
+    # personal_stats = serializers.SerializerMethodField()
+    # breaks = ReplacementBreakSerializer(source='*')
+    # actions = serializers.SerializerMethodField()
+    # members = ReplacementMemberShortSerializer(source='members_info', many=True)
+
+    class Meta:
+        model = Replacement
+        fields = (
+            'id',
+            'group',
+            'date',
+            'break_start',
+            'break_end',
+            'break_max_duration',
+            'min_active',
+            'stats',
+            # 'personal_stats',
+            # 'breaks',
+            # 'actions',
+            # 'members',
+            # 'general',
         )
-        return result
 
-    def get_actions(self, instance):
-        result = {
-            'replacement_button': None,
-            'break_button': None,
-        }
-        now = datetime.datetime.now().astimezone()
-        if instance.date != now.date():
-            return result
-        user = get_current_user()
-        member = instance.get_member_by_user(user)
-        if not member:
-            return result
+    # def get_personal_stats(self, instance):
+    #     user = get_current_user()
+    #     member = instance.get_member_by_user(user)
+    #     return ReplacementPersonalStatsSerializer(member, allow_null=True).data
 
-        # replacement_button
-        if not member.time_online:
-            result['replacement_button'] = 'online'
-        elif not member.time_offline:
-            result['replacement_button'] = 'offline'
+    # def get_stats(self, instance):
+    #     result = self.Meta.model.objects.filter(pk=instance.pk).aggregate(
+    #         members_count=Count('members', distinct=True),
+    #         breaks_count=Count('breaks', distinct=True),
+    #         members_online=Count('members', filter=Q(members_info__status_id=REPLACEMENT_MEMBER_ONLINE), distinct=True),
+    #         members_offline=Count('members', filter=Q(members_info__status_id=REPLACEMENT_MEMBER_OFFLINE), distinct=True),
+    #         members_busy=Count('members', filter=Q(members_info__status_id=REPLACEMENT_MEMBER_BUSY), distinct=True),
+    #         members_break=Count('members', filter=Q(members_info__status_id=REPLACEMENT_MEMBER_BREAK), distinct=True),
+    #     )
+    #     return result
 
-        # breaks_button
-        break_obj = instance.get_break_for_user(user)
-        if not break_obj:
-            replacement_finish = datetime.datetime.combine(
-                instance.date, instance.break_end
-            ).astimezone()
-            if replacement_finish - datetime.timedelta(minutes=30) >= now:
-                result['break_button'] = 'create'
-        else:
-            member_break_start = datetime.datetime.combine(
-                now.date(), break_obj.break_start
-            ).astimezone()
+    # def get_actions(self, instance):
+    #     result = {
+    #         'replacement_button': None,
+    #         'break_button': None,
+    #     }
+    #     now = datetime.datetime.now().astimezone()
+    #     if instance.date != now.date():
+    #         return result
+    #     user = get_current_user()
+    #     member = instance.get_member_by_user(user)
+    #     if not member:
+    #         return result
 
-            if not member.time_break_start:
-                if now + timedelta(minutes=5) < member_break_start:
-                    result['break_button'] = 'coming'
-                else:
-                    result['break_button'] = 'start'
-            elif not member.time_break_end:
-                result['break_button'] = 'finish'
+    #     # replacement_button
+    #     if not member.time_online:
+    #         result['replacement_button'] = 'online'
+    #     elif not member.time_offline:
+    #         result['replacement_button'] = 'offline'
 
-        return result
+    #     # breaks_button
+    #     break_obj = instance.get_break_for_user(user)
+    #     if not break_obj:
+    #         replacement_finish = datetime.datetime.combine(
+    #             instance.date, instance.break_end
+    #         ).astimezone()
+    #         if replacement_finish - datetime.timedelta(minutes=30) >= now:
+    #             result['break_button'] = 'create'
+    #     else:
+    #         member_break_start = datetime.datetime.combine(
+    #             now.date(), break_obj.break_start
+    #         ).astimezone()
+
+    #         if not member.time_break_start:
+    #             if now + timedelta(minutes=5) < member_break_start:
+    #                 result['break_button'] = 'coming'
+    #             else:
+    #                 result['break_button'] = 'start'
+    #         elif not member.time_break_end:
+    #             result['break_button'] = 'finish'
+
+    #     return result
 
 
 class ReplacementCreateSerializer(InfoModelSerializer):
@@ -310,13 +310,13 @@ class ReplacementUpdateSerializer(InfoModelSerializer):
 
     def validate(self, attrs):
         # Check times
-
         if attrs.get('break_start') or attrs.get('break_end'):
             break_start = attrs.get('break_start') or self.instance.break_start
             break_end = attrs.get('break_end') or self.instance.break_end
             if break_start >= break_end:
                 raise ParseError(
-                    'Время начала перерыва должно быть меньше времени окончания.'
+                    'Время начала перерыва должно быть меньше времени '
+                    'окончания.'
                 )
 
         # Check duplicates
@@ -392,24 +392,24 @@ class ReplacementMemberUpdateSerializer(InfoModelSerializer):
             'status',
         )
 
-    def validate_status(self, value):
-        now = datetime.datetime.now().astimezone().date()
-        if self.instance.replacement.date != now:
-            raise ParseError(
-                'Смена ещё не началась или уже завершилась.'
-            )
+    # def validate_status(self, value):
+    #     now = datetime.datetime.now().astimezone().date()
+    #     if self.instance.replacement.date != now:
+    #         raise ParseError(
+    #             'Смена ещё не началась или уже завершилась.'
+    #         )
 
-        value_code = value.code
-        instance_value_code = self.instance.status_id
-        if value_code == REPLACEMENT_MEMBER_ONLINE:
-            if self.instance.time_offline:
-                raise ParseError(
-                    'Вы уже завершили смену.'
-                )
-        elif value == REPLACEMENT_MEMBER_OFFLINE:
-            if instance_value_code != REPLACEMENT_MEMBER_ONLINE:
-                raise ParseError(
-                    'Невозможно завершить смену. '
-                    'Проверьте все незавершенные активности смены.'
-                )
-        return value
+    #     value_code = value.code
+    #     instance_value_code = self.instance.status_id
+    #     if value_code == REPLACEMENT_MEMBER_ONLINE:
+    #         if self.instance.time_offline:
+    #             raise ParseError(
+    #                 'Вы уже завершили смену.'
+    #             )
+    #     elif value == REPLACEMENT_MEMBER_OFFLINE:
+    #         if instance_value_code != REPLACEMENT_MEMBER_ONLINE:
+    #             raise ParseError(
+    #                 'Невозможно завершить смену. '
+    #                 'Проверьте все незавершенные активности смены.'
+    #             )
+    #     return value

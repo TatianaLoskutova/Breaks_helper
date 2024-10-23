@@ -136,7 +136,6 @@ class EmployeeUpdateSerializer(ExtendedModelSerializer):
         return attrs
 
 
-
 class EmployeeDeleteSerializer(serializers.Serializer):
     def validate(self, attrs):
         if self.instance.is_director:

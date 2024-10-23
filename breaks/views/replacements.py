@@ -37,7 +37,7 @@ class ReplacementView(LCRUViewSet):
         OrderingFilter,
         DjangoFilterBackend,
     )
-    filterset_class = ReplacementFilter
+    # filterset_class = ReplacementFilter
 
     def get_queryset(self):
         return ReplacementFactory().list()

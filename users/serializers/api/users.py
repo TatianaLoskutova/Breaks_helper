@@ -49,6 +49,10 @@ class ChangePasswordSerializer(serializers.ModelSerializer):
         model = User
         fields = ('old_password', 'new_password')
 
+    def validate_new_password(self, value):
+        validate_password(value)
+        return value
+
     def validate(self, attrs):
         user = self.instance
         old_password = attrs.pop('old_password')
@@ -57,10 +61,6 @@ class ChangePasswordSerializer(serializers.ModelSerializer):
                 'Проверьте правильность текущего пароля.'
             )
         return attrs
-
-    def validate_new_password(self, value):
-        validate_password(value)
-        return value
 
     def update(self, instance, validated_data):
         password = validated_data.pop('new_password')
