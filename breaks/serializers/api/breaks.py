@@ -2,7 +2,7 @@ import datetime
 
 from crum import get_current_user
 # from django.db import transaction
-# from django.utils import timezone
+from django.utils import timezone
 # from rest_framework import serializers
 from rest_framework.exceptions import ParseError
 
@@ -54,31 +54,58 @@ class BreakMeCreateSerializer(InfoModelSerializer):
             member__employee__user=user
         ).first()
 
+        now = timezone.now().date()
+        if replacement.date != now:
+            raise ParseError(
+                'Время резервирования перерыва уже закончилось или еще не '
+                'началось.'
+            )
         if not member:
             raise ParseError('У вас нет доступа к текущей смене.')
 
         if attrs['break_start'] < replacement.break_start:
             raise ParseError(
-                'Время начала не должно быть меньше времени, указанного в смене.'
+                'Время начала не должно быть меньше времени, указанного в '
+                'смене.'
             )
         if attrs['break_end'] > replacement.break_end:
             raise ParseError(
-                'Время окончания не должно быть больше времени, указанного в смене.'
+                'Время окончания не должно быть больше времени, указанного в '
+                'смене.'
             )
         if attrs['break_start'] >= attrs['break_end']:
             raise ParseError(
                 'Время начала не должно быть больше времени окончания.'
             )
 
-        max_duration = datetime.timedelta(minutes=replacement.break_max_duration)
-        break_start = datetime.datetime.combine(datetime.date.today(), attrs['break_start'])
-        break_end = datetime.datetime.combine(datetime.date.today(), attrs['break_end'])
-        if break_start + max_duration > break_end:
+        max_duration = datetime.timedelta(
+            minutes=replacement.break_max_duration
+        )
+        break_start = datetime.datetime.combine(
+            datetime.date.today(), attrs['break_start']
+        )
+        break_end = datetime.datetime.combine(
+            datetime.date.today(), attrs['break_end']
+        )
+        if break_start + max_duration < break_end:
             raise ParseError(
-                'Продолжительность обеда превышает максимальное установленное значение.'
+                'Продолжительность обеда превышает максимальное установленное '
+                'значение.'
             )
+        free_breaks = replacement.free_breaks_available(
+            attrs['break_start'], attrs['break_end']
+        )
+
+        if free_breaks <= replacement.min_active:
+            raise ParseError('Нет свободных мест на выбранный интервал.')
         attrs['replacement'] = replacement
         attrs['member'] = member
+
+        if replacement.breaks.filter(member=member).exists():
+            raise ParseError(
+                'Вы уже зарезервировали обеденный перерыв.'
+            )
+
         return attrs
 
 
