@@ -5,6 +5,11 @@ from users.serializers.nested.users import UserShortSerializer
 
 
 class ExtendedModelSerializer(serializers.ModelSerializer):
+    """
+    Сериализатор, расширяющий функциональность стандартного сериализатора
+    моделей.
+    """
+
     class Meta:
         abstract = True
 
@@ -29,6 +34,8 @@ class ExtendedModelSerializer(serializers.ModelSerializer):
 
 
 class InfoModelSerializer(ExtendedModelSerializer):
+    """Сериализатор для моделей с информацией о создателе и обновителе."""
+
     created_by = UserShortSerializer()
     updated_by = UserShortSerializer()
 
@@ -37,5 +44,7 @@ class InfoModelSerializer(ExtendedModelSerializer):
 
 
 class DictMixinSerializer(serializers.Serializer):
+    """Сериализатор для представления словарных данных."""
+
     code = serializers.CharField()
     name = serializers.CharField()

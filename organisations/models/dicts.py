@@ -2,6 +2,7 @@ from common.models.mixins import BaseDictModelMixin
 
 
 class Position(BaseDictModelMixin):
+    """Модель позиции."""
 
     class Meta:
         verbose_name = 'Должность'

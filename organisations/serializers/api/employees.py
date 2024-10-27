@@ -15,6 +15,8 @@ User = get_user_model()
 
 
 class EmployeeSearchSerializer(ExtendedModelSerializer):
+    """Сериализатор поиска сотрудника."""
+
     user = UserEmployeeSerializer()
     position = PositionShortSerializer()
 
@@ -28,6 +30,8 @@ class EmployeeSearchSerializer(ExtendedModelSerializer):
 
 
 class EmployeeListSerializer(ExtendedModelSerializer):
+    """Сериализатор списка сотрудников."""
+
     user = UserEmployeeSerializer()
     position = PositionShortSerializer()
 
@@ -42,6 +46,8 @@ class EmployeeListSerializer(ExtendedModelSerializer):
 
 
 class EmployeeRetrieveSerializer(ExtendedModelSerializer):
+    """Сериализатор деталки сотрудника."""
+
     user = UserEmployeeSerializer()
     position = PositionShortSerializer()
 
@@ -56,6 +62,8 @@ class EmployeeRetrieveSerializer(ExtendedModelSerializer):
 
 
 class EmployeeCreateSerializer(ExtendedModelSerializer):
+    """Сериализатор создания сотрудника."""
+
     first_name = serializers.CharField(write_only=True)
     last_name = serializers.CharField(write_only=True)
     email = serializers.EmailField(write_only=True)
@@ -108,6 +116,8 @@ class EmployeeCreateSerializer(ExtendedModelSerializer):
 
 
 class EmployeeUpdateSerializer(ExtendedModelSerializer):
+    """Сериализатор обновления сотрудника."""
+
     position = serializers.PrimaryKeyRelatedField(
         queryset=Position.objects.filter(is_active=True)
     )
@@ -141,6 +151,8 @@ class EmployeeUpdateSerializer(ExtendedModelSerializer):
 
 
 class EmployeeDeleteSerializer(serializers.Serializer):
+    """Сериализатор удаления сотрудника."""
+
     def validate(self, attrs):
         if self.instance.is_director:
             raise ParseError(

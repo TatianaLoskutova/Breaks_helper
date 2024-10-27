@@ -5,6 +5,8 @@ User = get_user_model()
 
 
 class AuthBackend(object):
+    """Кастомный бэкенд."""
+
     supports_object_permissions = True
     supports_anonymous_user = True
     supports_inactive_user = True
@@ -18,7 +20,8 @@ class AuthBackend(object):
     def authenticate(self, request, username, password):
         try:
             user = User.objects.get(
-                Q(username=username) | Q(email=username) | Q(phone_number=username)
+                Q(username=username) | Q(email=username) |
+                Q(phone_number=username)
             )
         except User.DoesNotExist:
             return None

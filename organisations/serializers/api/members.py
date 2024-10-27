@@ -9,6 +9,8 @@ from organisations.serializers.nested.employees import EmployeeShortSerializer
 
 
 class MemberSearchSerializer(ExtendedModelSerializer):
+    """Сериализатор поиска участника группы."""
+
     full_name = serializers.CharField(source='employee.user.full_name')
     username = serializers.CharField(source='employee.user.username')
     position = PositionShortSerializer(source='employee.position')
@@ -24,6 +26,8 @@ class MemberSearchSerializer(ExtendedModelSerializer):
 
 
 class MemberListSerializer(ExtendedModelSerializer):
+    """Сериализатор списка участников группы."""
+
     employee = EmployeeShortSerializer()
 
     class Meta:
@@ -36,6 +40,8 @@ class MemberListSerializer(ExtendedModelSerializer):
 
 
 class MemberRetrieveSerializer(ExtendedModelSerializer):
+    """Сериализатор деталки участника группы."""
+
     employee = EmployeeShortSerializer()
 
     class Meta:
@@ -48,6 +54,8 @@ class MemberRetrieveSerializer(ExtendedModelSerializer):
 
 
 class MemberCreateSerializer(ExtendedModelSerializer):
+    """Сериализатор создания участника группы."""
+
     employees = serializers.PrimaryKeyRelatedField(
         queryset=Employee.objects.all(), many=True, write_only=True
     )

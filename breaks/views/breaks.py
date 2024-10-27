@@ -19,6 +19,8 @@ from common.views.mixins import ExtendedCRUAPIView
     ),
 )
 class BreakMeView(ExtendedCRUAPIView):
+    """Представление моего обеденного перерыва."""
+
     queryset = Break.objects.all()
     serializer_class = breaks_s.BreakMeUpdateSerializer
     multi_serializer_class = {

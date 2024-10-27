@@ -8,4 +8,6 @@ from organisations.models.dicts import Position
     list=extend_schema(summary='Список должностей', tags=['Словари']),
 )
 class PositionView(DictListMixin):
+    """Представление позиции."""
+
     model = Position

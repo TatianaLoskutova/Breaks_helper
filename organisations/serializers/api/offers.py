@@ -16,6 +16,8 @@ from users.serializers.nested.users import UserShortSerializer
 
 # From Org to User
 class OfferOrgToUserListSerializer(InfoModelSerializer):
+    """Сериализатор списка офферов организации сотруднику."""
+
     user = UserShortSerializer()
     can_accept = serializers.BooleanField()
     can_reject = serializers.BooleanField()
@@ -35,6 +37,8 @@ class OfferOrgToUserListSerializer(InfoModelSerializer):
 
 
 class OfferOrgToUserCreateSerializer(ExtendedModelSerializer):
+    """Сериализатор создания оффера организации сотруднику."""
+
     users = serializers.PrimaryKeyRelatedField(
         queryset=User.objects.exclude(is_corporate_account=True), many=True,
         write_only=True,
@@ -85,6 +89,8 @@ class OfferOrgToUserCreateSerializer(ExtendedModelSerializer):
 
 
 class OfferOrgToUserUpdateSerializer(ExtendedModelSerializer):
+    """Сериализатор обновления оффера организации сотруднику."""
+
     accept = serializers.BooleanField(write_only=True)
 
     class Meta:
@@ -126,6 +132,8 @@ class OfferOrgToUserUpdateSerializer(ExtendedModelSerializer):
 
 # From User to Org
 class OfferUserToOrgListSerializer(InfoModelSerializer):
+    """Сериализатор спика офферов сотрудника организациям."""
+
     organisation = OrganisationShortSerializer()
     can_accept = serializers.BooleanField()
     can_reject = serializers.BooleanField()
@@ -145,6 +153,7 @@ class OfferUserToOrgListSerializer(InfoModelSerializer):
 
 
 class OfferUserToOrgCreateSerializer(ExtendedModelSerializer):
+    """Сериализатор создания оффера сотрудника организациям."""
 
     class Meta:
         model = Offer
@@ -178,6 +187,8 @@ class OfferUserToOrgCreateSerializer(ExtendedModelSerializer):
 
 
 class OfferUserToOrgUpdateSerializer(ExtendedModelSerializer):
+    """Сериализатор обновления оффера сотрудника организациям."""
+
     accept = serializers.BooleanField(write_only=True)
 
     class Meta:

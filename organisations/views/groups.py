@@ -31,8 +31,9 @@ from organisations.serializers.api import groups as groups_s
     ),
 )
 class GroupView(LCRUViewSet):
-    permission_classes = [IsMyGroup]
+    """Представление группы."""
 
+    permission_classes = [IsMyGroup]
     queryset = Group.objects.all()
     serializer_class = groups_s.GroupListSerializer
 

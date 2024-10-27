@@ -32,7 +32,7 @@ class ReplacementGeneralSerializer(ExtendedModelSerializer):
 
 
 class ReplacementPersonalStatsSerializer(ExtendedModelSerializer):
-    """Сериализатор статистки смены."""
+    """Сериализатор персональной статистки смены."""
 
     time_online = serializers.DateTimeField(format='%H:%M')
     time_break_start = serializers.DateTimeField(format='%H:%M')
@@ -87,7 +87,7 @@ class ReplacementPersonalStatsSerializer(ExtendedModelSerializer):
 
 
 class ReplacementBreakSerializer(serializers.Serializer):
-    """Сериализатор перерыва в смене."""
+    """Сериализатор обеденного перерыва через смену."""
 
     info = serializers.SerializerMethodField()
     button = serializers.SerializerMethodField()
@@ -103,7 +103,7 @@ class ReplacementBreakSerializer(serializers.Serializer):
 
 
 class ReplacementActionSerializer(serializers.Serializer):
-    """Сериализатор action."""
+    """Сериализатор кнопок actions через смену."""
 
     replacement_button = serializers.SerializerMethodField()
     break_button = serializers.SerializerMethodField()

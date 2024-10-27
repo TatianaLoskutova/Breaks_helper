@@ -9,6 +9,8 @@ User = get_user_model()
 
 
 class Group(InfoMixin):
+    """Модель группы организации."""
+
     organisation = models.ForeignKey(
         'Organisation', models.RESTRICT, 'groups',
         verbose_name='Организация',
@@ -35,6 +37,8 @@ class Group(InfoMixin):
 
 
 class Member(models.Model):
+    """Модель участника группы."""
+
     group = models.ForeignKey(
         'Group', models.CASCADE, 'members_info',
     )

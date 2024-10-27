@@ -15,6 +15,8 @@ from organisations.serializers.api import organisations
     list=extend_schema(summary='Список организаций Search', tags=['Словари']),
 )
 class OrganisationSearchView(ListViewSet):
+    """Представление поиска организации."""
+
     queryset = Organisation.objects.all()
     serializer_class = organisations.OrganisationSearchListSerializer
 
@@ -33,6 +35,8 @@ class OrganisationSearchView(ListViewSet):
     ),
 )
 class OrganisationView(LCRUViewSet):
+    """Представление организации."""
+
     permission_classes = [IsMyOrganisation]
     queryset = Organisation.objects.all()
     serializer_class = organisations.OrganisationListSerializer

@@ -42,8 +42,9 @@ from organisations.serializers.api import employees as employees_s
         ),
 )
 class EmployeeView(LCRUDViewSet):
-    permission_classes = [IsColleagues]
+    """Представление сотрудника."""
 
+    permission_classes = [IsColleagues]
     queryset = Employee.objects.all()
     serializer_class = employees_s.EmployeeListSerializer
 

@@ -27,8 +27,9 @@ from organisations.serializers.api import members as members_s
     ),
 )
 class MemberView(LCDViewSet):
-    permission_classes = [IsMembers]
+    """Представление участника группы."""
 
+    permission_classes = [IsMembers]
     queryset = Member.objects.all()
     serializer_class = members_s.MemberListSerializer
 

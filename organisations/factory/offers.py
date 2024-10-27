@@ -5,6 +5,8 @@ from organisations.models.offers import Offer
 
 
 class OfferFactory:
+    """Возвращает queryset офферов с информацией для организаций."""
+
     model = Offer
 
     def org_list(self):

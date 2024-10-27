@@ -8,4 +8,6 @@ from common.views.mixins import DictListMixin
     list=extend_schema(summary='Список статусов смен', tags=['Словари']),
 )
 class ReplacementStatusView(DictListMixin):
+    """Представление статуса смены."""
+
     model = ReplacementStatus

@@ -6,6 +6,8 @@ from breaks.models.replacements import Replacement
 
 
 class ReplacementFilter(django_filters.FilterSet):
+    """Кастомный фильтр смен."""
+
     CATEGORY_CHOICES = (
         ('active', 'Активные'),
         ('future', 'Предстоящие'),

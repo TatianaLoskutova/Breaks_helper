@@ -9,6 +9,8 @@ from users.serializers.nested.profile import (ProfileShortSerializer,
 
 
 class RegistrationSerializer(serializers.ModelSerializer):
+    """Сериализатор для регистрации."""
+
     email = serializers.EmailField()
     password = serializers.CharField(
         style={'input_type': 'password'}, write_only=True
@@ -42,6 +44,8 @@ class RegistrationSerializer(serializers.ModelSerializer):
 
 
 class ChangePasswordSerializer(serializers.ModelSerializer):
+    """Сериализатор смены пароля."""
+
     old_password = serializers.CharField(write_only=True)
     new_password = serializers.CharField(write_only=True)
 
@@ -70,6 +74,8 @@ class ChangePasswordSerializer(serializers.ModelSerializer):
 
 
 class MeSerializer(serializers.ModelSerializer):
+    """Сериализатор для собственных данных вошедшего в систему."""
+
     profile = ProfileShortSerializer()
 
     class Meta:
@@ -87,6 +93,8 @@ class MeSerializer(serializers.ModelSerializer):
 
 
 class MeUpdateSerializer(serializers.ModelSerializer):
+    """Сериализатор для обновления данных юзера вошедшего в систему."""
+
     profile = ProfileUpdateSerializer()
 
     class Meta:
@@ -123,6 +131,7 @@ class MeUpdateSerializer(serializers.ModelSerializer):
 
 
 class UserSearchListSerializer(serializers.ModelSerializer):
+    """Сериализатор для поиска юзера."""
 
     class Meta:
         model = User

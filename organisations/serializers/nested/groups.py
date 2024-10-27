@@ -6,6 +6,8 @@ from organisations.serializers.nested.organisations import \
 
 
 class GroupShortSerializer(ExtendedModelSerializer):
+    """Сериализатор краткой информации о группе."""
+
     organisation = OrganisationShortSerializer()
     manager = EmployeeShortSerializer()
 

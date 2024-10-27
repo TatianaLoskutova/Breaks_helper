@@ -24,8 +24,9 @@ from organisations.serializers.api import offers as offers_s
     ),
 )
 class OfferOrganisationView(LCUViewSet):
-    permission_classes = [IsOfferManager]
+    """Представление оффера организации юзеру."""
 
+    permission_classes = [IsOfferManager]
     queryset = Offer.objects.all()
     serializer_class = offers_s.OfferOrgToUserListSerializer
 
@@ -63,6 +64,8 @@ class OfferOrganisationView(LCUViewSet):
     ),
 )
 class OfferUserView(LCUViewSet):
+    """Представление оффера юзера организации."""
+
     queryset = Offer.objects.all()
     serializer_class = offers_s.OfferUserToOrgListSerializer
 

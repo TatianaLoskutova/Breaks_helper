@@ -11,6 +11,8 @@ from users.serializers.nested.users import UserShortSerializer
 
 
 class OrganisationSearchListSerializer(ExtendedModelSerializer):
+    """Сериализатор поиска организации."""
+
     director = UserShortSerializer()
 
     class Meta:
@@ -23,6 +25,8 @@ class OrganisationSearchListSerializer(ExtendedModelSerializer):
 
 
 class OrganisationListSerializer(InfoModelSerializer):
+    """Сериализатор списка организаций."""
+
     director = UserShortSerializer()
     pax = serializers.IntegerField()
     groups_count = serializers.IntegerField()
@@ -42,6 +46,8 @@ class OrganisationListSerializer(InfoModelSerializer):
 
 
 class OrganisationRetrieveSerializer(InfoModelSerializer):
+    """Сериализатор деталки организации."""
+
     director = UserShortSerializer()
     pax = serializers.IntegerField()
     groups_count = serializers.IntegerField()
@@ -61,6 +67,8 @@ class OrganisationRetrieveSerializer(InfoModelSerializer):
 
 
 class OrganisationCreateSerializer(ExtendedModelSerializer):
+    """Сериализатор создания организации."""
+
     class Meta:
         model = Organisation
         fields = (
@@ -91,6 +99,8 @@ class OrganisationCreateSerializer(ExtendedModelSerializer):
 
 
 class OrganisationUpdateSerializer(ExtendedModelSerializer):
+    """Сериализатор обновления организации."""
+
     class Meta:
         model = Organisation
         fields = (

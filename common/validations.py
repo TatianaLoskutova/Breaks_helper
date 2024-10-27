@@ -2,6 +2,8 @@ from rest_framework.exceptions import ParseError
 
 
 class Time15MinutesValidator:
+    """Валидация на 15 минутки."""
+
     message = 'Время доллжно быть кратно 15 минутам.'
 
     def __call__(self, value):

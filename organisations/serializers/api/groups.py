@@ -15,6 +15,8 @@ from organisations.serializers.nested.organisations import \
 
 
 class GroupListSerializer(InfoModelSerializer):
+    """Сериализатор списка групп."""
+
     organisation = OrganisationShortSerializer()
     manager = EmployeeShortSerializer()
     pax = serializers.IntegerField()
@@ -36,6 +38,8 @@ class GroupListSerializer(InfoModelSerializer):
 
 
 class GroupRetrieveSerializer(InfoModelSerializer):
+    """Сериализатор деталки группы."""
+
     breaks_info = BreakSettingsSerializer(allow_null=True)
     organisation = OrganisationShortSerializer()
     manager = EmployeeShortSerializer()
@@ -59,6 +63,8 @@ class GroupRetrieveSerializer(InfoModelSerializer):
 
 
 class GroupCreateSerializer(ExtendedModelSerializer):
+    """Сериализатор создания группы."""
+
     class Meta:
         model = Group
         fields = (
@@ -103,6 +109,7 @@ class GroupCreateSerializer(ExtendedModelSerializer):
 
 
 class GroupUpdateSerializer(ExtendedModelSerializer):
+    """Сериализатор обновления группы."""
 
     class Meta:
         model = Group
@@ -124,6 +131,8 @@ class GroupUpdateSerializer(ExtendedModelSerializer):
 
 
 class GroupSettingsUpdateSerializer(ExtendedModelSerializer):
+    """Сериализатор обновления настроек группы."""
+
     breaks_info = BreakSettingsSerializer()
 
     class Meta:

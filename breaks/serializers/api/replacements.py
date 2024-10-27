@@ -28,6 +28,8 @@ User = get_user_model()
 
 
 class ReplacementListSerializer(InfoModelSerializer):
+    """Сериализатор списка смен."""
+
     group = GroupShortSerializer(source='group.group')
 
     class Meta:
@@ -44,6 +46,7 @@ class ReplacementListSerializer(InfoModelSerializer):
 
 
 class ReplacementRetrieveSerializer(InfoModelSerializer):
+    """Сериализатор деталки смены."""
 
     stats = serializers.SerializerMethodField()
     general = ReplacementGeneralSerializer(source='*')
@@ -148,6 +151,8 @@ class ReplacementRetrieveSerializer(InfoModelSerializer):
 
 
 class ReplacementCreateSerializer(InfoModelSerializer):
+    """Сериализатор создания смены."""
+
     group = serializers.PrimaryKeyRelatedField(
         queryset=Group.objects.all()
     )
@@ -288,6 +293,8 @@ class ReplacementCreateSerializer(InfoModelSerializer):
 
 
 class ReplacementUpdateSerializer(InfoModelSerializer):
+    """Сериализатор обновления смены."""
+
     members = serializers.PrimaryKeyRelatedField(
         queryset=Member.objects.all(), many=True, allow_null=True,
         required=False,
@@ -397,6 +404,8 @@ class ReplacementUpdateSerializer(InfoModelSerializer):
 
 
 class ReplacementMemberListSerializer(InfoModelSerializer):
+    """Сериализатор списка участников смены."""
+
     status = DictMixinSerializer()
 
     class Meta:
@@ -408,6 +417,7 @@ class ReplacementMemberListSerializer(InfoModelSerializer):
 
 
 class ReplacementMemberUpdateSerializer(InfoModelSerializer):
+    """Сериализатор обновления участников смены."""
 
     class Meta:
         model = ReplacementMember

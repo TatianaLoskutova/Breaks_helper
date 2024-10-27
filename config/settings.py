@@ -37,7 +37,7 @@ INSTALLED_APPS += [
     'phonenumber_field',
     'django_extensions',
     'django_generate_series',
-    # 'debug_toolbar',
+    'debug_toolbar',
 ]
 
 # apps
@@ -60,7 +60,7 @@ INSTALLED_APPS += [
 ]
 
 MIDDLEWARE = [
-    # 'debug_toolbar.middleware.DebugToolbarMiddleware',
+    'debug_toolbar.middleware.DebugToolbarMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'corsheaders.middleware.CorsMiddleware',
@@ -226,23 +226,7 @@ SIMPLE_JWT = {
     'SLIDING_TOKEN_REFRESH_LIFETIME': timedelta(days=7),
 }
 
-# if DEBUG:
-#     import sentry_sdk
-#     from sentry_sdk.integrations.django import DjangoIntegration
-
-#     sentry_sdk.init(
-#         dsn=env.str('SENTRY_DSN', ''),
-#         integrations=[
-#             DjangoIntegration(),
-#         ],
-#         traces_sample_rate=1.0,
-#         send_default_pii=True
-#     )
-
-#     INTERNAL_IPS = [
-#         '127.0.0.1',
-#     ]
-
+INTERNAL_IPS = ['127.0.0.1',]
 
 # LOGGING = {
 #     'version': 1,

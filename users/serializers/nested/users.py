@@ -1,10 +1,10 @@
-from django.contrib.auth import get_user_model
 from rest_framework import serializers
 
 from users.models.users import User
 
 
 class UserShortSerializer(serializers.ModelSerializer):
+    """Сокращенный сериализатор юзера."""
 
     class Meta:
         model = User
@@ -16,6 +16,7 @@ class UserShortSerializer(serializers.ModelSerializer):
 
 
 class UserEmployeeSerializer(serializers.ModelSerializer):
+    """Сокращенный сериализатор юзера-сотрудника."""
 
     class Meta:
         model = User

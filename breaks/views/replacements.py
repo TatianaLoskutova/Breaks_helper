@@ -21,6 +21,8 @@ from common.views.mixins import ExtendedRetrieveUpdateAPIView, LCRUViewSet
     ),
 )
 class ReplacementView(LCRUViewSet):
+    """Представление смены."""
+
     queryset = Replacement.objects.all()
     serializer_class = replacements_s.ReplacementListSerializer
 
@@ -50,6 +52,8 @@ class ReplacementView(LCRUViewSet):
     ),
 )
 class MeReplacementMemberView(ExtendedRetrieveUpdateAPIView):
+    """Представление меня как участника смены."""
+
     queryset = ReplacementMember.objects.all()
     serializer_class = replacements_s.ReplacementMemberListSerializer
     multi_serializer_class = {

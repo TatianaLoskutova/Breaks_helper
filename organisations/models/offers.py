@@ -7,6 +7,8 @@ User = get_user_model()
 
 
 class Offer(InfoMixin):
+    """Модель оффера."""
+
     organisation = models.ForeignKey(
         'Organisation', models.RESTRICT, 'offers',
         verbose_name='Организация',

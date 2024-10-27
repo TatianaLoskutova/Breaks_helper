@@ -5,6 +5,8 @@ from users.serializers.nested.users import UserShortSerializer
 
 
 class EmployeeShortSerializer(ExtendedModelSerializer):
+    """Сериализатор краткой информации о сотруднике."""
+
     user = UserShortSerializer()
     position = PositionShortSerializer()
 

@@ -3,6 +3,8 @@ from common.serializers.mixins import ExtendedModelSerializer
 
 
 class BreakForReplacementSerializer(ExtendedModelSerializer):
+    """Сериализатор вывода информации обеденного перерыва для смены."""
+
     class Meta:
         model = Break
         fields = (

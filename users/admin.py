@@ -15,11 +15,18 @@ class ProfileAdmin(admin.StackedInline):
 class UserAdmin(UserAdmin):
     change_user_password_template = None
     fieldsets = (
-        (None, {'fields': ('phone_number', 'email', 'username', 'is_corporate_account')}),
+        (None, {
+            'fields': (
+                'phone_number', 'email', 'username', 'is_corporate_account'
+            )
+        }),
         (_('Личная информация'),
          {'fields': ('first_name', 'last_name',)}),
         (_('Permissions'), {
-            'fields': ('is_active', 'is_staff', 'is_superuser', 'groups', 'user_permissions'),
+            'fields': (
+                'is_active', 'is_staff', 'is_superuser', 'groups',
+                'user_permissions',
+            ),
         }),
         (_('Important dates'), {'fields': ('last_login',)}),
     )
@@ -39,7 +46,3 @@ class UserAdmin(UserAdmin):
     readonly_fields = ('last_login',)
 
     inlines = (ProfileAdmin,)
-
-
-
-# Register your models here.

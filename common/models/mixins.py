@@ -5,6 +5,8 @@ from users.models.users import User
 
 
 class BaseDictModelMixin(models.Model):
+    """Базовая модель словаря."""
+
     code = models.CharField('Код', max_length=16, primary_key=True)
     name = models.CharField('Название', max_length=32,)
     sort = models.PositiveSmallIntegerField(
@@ -21,6 +23,8 @@ class BaseDictModelMixin(models.Model):
 
 
 class DateMixin(models.Model):
+    """Модель дат для словаря."""
+
     created_at = models.DateTimeField('Created at', null=True, blank=False)
     updated_at = models.DateTimeField('Updated at', null=True, blank=False)
 
@@ -35,6 +39,8 @@ class DateMixin(models.Model):
 
 
 class InfoMixin(DateMixin):
+    """Модель создания для словаря."""
+
     created_by = models.ForeignKey(
         User, models.SET_NULL, 'created_%(app_label)s_%(class)s',
         verbose_name='Created by', null=True,)

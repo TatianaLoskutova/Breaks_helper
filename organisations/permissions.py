@@ -2,6 +2,8 @@ from rest_framework.permissions import SAFE_METHODS, IsAuthenticated
 
 
 class IsMyOrganisation(IsAuthenticated):
+    """Разрешение для работы с организациями."""
+
     def has_permission(self, request, view):
         try:
             org_id = request.parser_context['kwargs']['pk']
@@ -23,6 +25,8 @@ class IsMyOrganisation(IsAuthenticated):
 
 
 class IsColleagues(IsAuthenticated):
+    """Разрешение для доступа коллег к объектам."""
+
     def has_object_permission(self, request, view, obj):
         if obj.organisation.director == request.user:
             return True
@@ -33,6 +37,8 @@ class IsColleagues(IsAuthenticated):
 
 
 class IsMembers(IsAuthenticated):
+    """Разрешение для участников группы для доступа к объектам."""
+
     def has_object_permission(self, request, view, obj):
         if (
             obj.group.organisation.director == request.user
@@ -46,6 +52,8 @@ class IsMembers(IsAuthenticated):
 
 
 class IsMyGroup(IsAuthenticated):
+    """Разрешение для участников группы для выполнения операций с объектами."""
+
     def has_object_permission(self, request, view, obj):
         if obj.organisation.director == request.user:
             return True
@@ -59,6 +67,10 @@ class IsMyGroup(IsAuthenticated):
 
 
 class IsOfferManager(IsAuthenticated):
+    """
+    Разрешение для директора организации на доступ к объектам предложений.
+    """
+
     def has_object_permission(self, request, view, obj):
         if obj.organisation.director == request.user:
             return True

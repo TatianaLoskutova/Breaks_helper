@@ -17,9 +17,14 @@ User = get_user_model()
 
 
 @extend_schema_view(
-    post=extend_schema(summary='Регистрация пользователя', tags=['Аутентификация & Авторизация']),
+    post=extend_schema(
+        summary='Регистрация пользователя',
+        tags=['Аутентификация & Авторизация'],
+    ),
 )
 class RegistrationView(generics.CreateAPIView):
+    """Представление регистрации."""
+
     queryset = User.objects.all()
     permission_classes = [AllowAny]
     serializer_class = user_s.RegistrationSerializer
@@ -31,6 +36,7 @@ class RegistrationView(generics.CreateAPIView):
         summary='Смена пароля', tags=['Аутентификация & Авторизация']),
 )
 class ChangePasswordView(APIView):
+    """Представление смены пароля."""
 
     def post(self, request):
         user = request.user
@@ -43,11 +49,20 @@ class ChangePasswordView(APIView):
 
 
 @extend_schema_view(
-    get=extend_schema(summary='Профиль пользователя', tags=['Пользователи']),
-    put=extend_schema(summary='Изменить профиль пользователя', tags=['Пользователи']),
-    patch=extend_schema(summary='Изменить частично профиль пользователя', tags=['Пользователи']),
+    get=extend_schema(
+        summary='Профиль пользователя', tags=['Пользователи'],
+    ),
+    put=extend_schema(
+        summary='Изменить профиль пользователя', tags=['Пользователи'],
+    ),
+    patch=extend_schema(
+        summary='Изменить частично профиль пользователя',
+        tags=['Пользователи'],
+    ),
 )
 class MeView(RetrieveUpdateAPIView):
+    """Представление персональных данных вошедшего в систему."""
+
     permission_classes = [IsNotCorporate]
     queryset = User.objects.all()
     serializer_class = user_s.MeSerializer
@@ -63,9 +78,13 @@ class MeView(RetrieveUpdateAPIView):
 
 
 @extend_schema_view(
-    list=extend_schema(summary='Список пользователей Search', tags=['Словари']),
+    list=extend_schema(
+        summary='Список пользователей Search', tags=['Словари']
+    ),
 )
 class UserListSearchView(ListViewSet):
+    """Представление поиска юзера."""
+
     queryset = User.objects.exclude(
         Q(is_superuser=True) | Q(is_corporate_account=True)
     )

@@ -11,12 +11,15 @@ from common.services import convert_timedelta_to_str_time
 
 
 class BreakSettingsSerializer(ExtendedModelSerializer):
+    """Сериализатор настроек обеденного перерыва."""
+
     class Meta:
         model = GroupInfo
         exclude = ('group',)
 
 
 class ReplacementShortSerializer(InfoModelSerializer):
+    """Сериализатор краткой информации о смене."""
 
     class Meta:
         model = Replacement
@@ -31,6 +34,8 @@ class ReplacementShortSerializer(InfoModelSerializer):
 
 
 class ReplacementMemberShortSerializer(ExtendedModelSerializer):
+    """Сериализатор краткой информации об участнике смены."""
+
     id = serializers.CharField(source='member.employee.user.pk')
     full_name = serializers.CharField(source='member.employee.user.full_name')
     username = serializers.CharField(source='member.employee.user.username')

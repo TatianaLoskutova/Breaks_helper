@@ -4,6 +4,8 @@ from django.db.models import Q
 
 
 class GroupManager(models.Manager):
+    """Кастомный менеджер группы."""
+
     def my_groups(self):
         user = get_current_user()
         return self.filter(

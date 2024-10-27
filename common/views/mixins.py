@@ -7,6 +7,11 @@ from common.serializers.mixins import DictMixinSerializer
 
 
 class ExtendedView:
+    """
+    "Расширенный класс представлений с многоуровневыми разрешениями и
+    сериализаторами.
+    """
+
     multi_permission_classes = None
     multi_serializer_class = None
     request = None
@@ -20,32 +25,11 @@ class ExtendedView:
         if not self.multi_serializer_class:
             return self.serializer_class
 
-        # define user role codes
-        user = self.request.user
-        if user.is_anonymous:
-            user_roles = (roles.PUBLIC_GROUP,)
-        elif user.is_superuser:
-            user_roles = (roles.ADMIN_GROUP,)
-        else:
-            user_roles = set(user.groups.all().values_list('code', flat=True))
-
         # define request action or method
         if hasattr(self, 'action') and self.action:
             action = self.action
         else:
             action = self.request.method
-
-        # Trying to get role + action serializer
-        for role in user_roles:
-            serializer_key = f'{role}__{action}'
-            if self.multi_serializer_class.get(serializer_key):
-                return self.multi_serializer_class.get(serializer_key)
-
-        # Trying to get role serializer
-        for role in user_roles:
-            serializer_key = role
-            if self.multi_serializer_class.get(serializer_key):
-                return self.multi_serializer_class.get(serializer_key)
 
         # Trying to get action serializer or default
         return self.multi_serializer_class.get(action) or self.serializer_class
@@ -66,18 +50,26 @@ class ExtendedView:
 
 
 class ExtendedGenericViewSet(ExtendedView, GenericViewSet):
+    """Расширенный граничный класс для работы с набором представлений."""
+
     pass
 
 
 class ListViewSet(ExtendedGenericViewSet, mixins.ListModelMixin):
+    """Набор представлений для получения списка объектов."""
+
     pass
 
 
 class UpdateViewSet(ExtendedGenericViewSet, mixins.UpdateModelMixin):
+    """Набор представлений для обновления объектов."""
+
     pass
 
 
 class DictListMixin(ListViewSet):
+    """Смешанный класс для представления списка словарей."""
+
     serializer_class = DictMixinSerializer
     pagination_class = None
     model = None
@@ -94,11 +86,18 @@ class LCRUViewSet(ExtendedGenericViewSet,
                   mixins.RetrieveModelMixin,
                   mixins.UpdateModelMixin,
                   mixins.ListModelMixin, ):
+    """Набор представлений для создания, получения и обновления объектов."""
+
     pass
 
 
 class LCRUDViewSet(LCRUViewSet,
                    mixins.DestroyModelMixin, ):
+    """
+    Набор представлений для создания, получения, обновления и удаления
+    объектов.
+    """
+
     pass
 
 
@@ -106,6 +105,10 @@ class LCUViewSet(ExtendedGenericViewSet,
                  mixins.ListModelMixin,
                  mixins.CreateModelMixin,
                  mixins.UpdateModelMixin, ):
+    """
+    Набор представлений для получения списка, создания и обновления объектов.
+    """
+
     pass
 
 
@@ -113,10 +116,16 @@ class LCDViewSet(ExtendedGenericViewSet,
                  mixins.ListModelMixin,
                  mixins.CreateModelMixin,
                  mixins.DestroyModelMixin, ):
+    """
+    Набор представлений для получения списка, создания и удаления объектов.
+    """
+
     pass
 
 
 class ExtendedGenericAPIView(ExtendedView, GenericAPIView):
+    """Расширенный класс представлений для обработки общих запросов."""
+
     pass
 
 
@@ -124,6 +133,11 @@ class ExtendedRetrieveUpdateAPIView(mixins.RetrieveModelMixin,
                                     mixins.UpdateModelMixin,
                                     ExtendedGenericAPIView,
                                     ):
+    """
+    Расширенный класс для получения и обновления объектов через различные
+    HTTP-методы.
+    """
+
     def get(self, request, *args, **kwargs):
         return self.retrieve(request, *args, **kwargs)
 
@@ -135,6 +149,11 @@ class ExtendedCRUAPIView(mixins.RetrieveModelMixin,
                          mixins.CreateModelMixin,
                          mixins.UpdateModelMixin,
                          ExtendedGenericAPIView):
+    """
+    Представление для обработки операций создания, получения и обновления
+    модели.
+    """
+
     def get(self, request, *args, **kwargs):
         return self.retrieve(request, *args, **kwargs)
 

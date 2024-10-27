@@ -2,6 +2,8 @@ from django.db import models
 
 
 class Profile(models.Model):
+    """"Модель профиля юзера."""
+
     user = models.OneToOneField(
         'users.User', models.CASCADE, related_name='profile',
         verbose_name='Пользователь', primary_key=True,

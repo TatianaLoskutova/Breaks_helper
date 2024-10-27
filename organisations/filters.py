@@ -8,6 +8,8 @@ from organisations.models.organisations import Employee, Organisation
 
 
 class OrganisationFilter(django_filters.FilterSet):
+    """Кастомный фильтр для организации."""
+
     can_manage = django_filters.BooleanFilter('can_manage', label='Can manage')
 
     class Meta:
@@ -16,6 +18,8 @@ class OrganisationFilter(django_filters.FilterSet):
 
 
 class EmployeeFilter(django_filters.FilterSet):
+    """Кастомный фильтр для сотрудника."""
+
     only_corporate = django_filters.BooleanFilter(
         'user__is_corporate_account', label='Is corporate account'
     )
@@ -34,6 +38,8 @@ class EmployeeFilter(django_filters.FilterSet):
 
 
 class GroupFilter(django_filters.FilterSet):
+    """Кастомный фильтр для группы."""
+
     is_member = django_filters.BooleanFilter('is_member',)
     can_manage = django_filters.BooleanFilter('can_manage',)
 
@@ -43,6 +49,8 @@ class GroupFilter(django_filters.FilterSet):
 
 
 class OfferOrgFilter(django_filters.FilterSet):
+    """Кастомный фильтр для офферов организации."""
+
     TYPE_CHOICES = (
         ('sent', 'Отправленные'),
         ('received', 'Полученные'),
@@ -100,6 +108,8 @@ class OfferOrgFilter(django_filters.FilterSet):
 
 
 class OfferUserFilter(django_filters.FilterSet):
+    """Кастомный фильтр для офферов юзера."""
+
     TYPE_CHOICES = (
         ('sent', 'Отправленные'),
         ('received', 'Полученные'),

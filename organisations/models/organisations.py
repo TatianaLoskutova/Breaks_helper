@@ -9,6 +9,8 @@ from users.models.users import User
 
 
 class Organisation(InfoMixin):
+    """Модель организации."""
+
     name = models.CharField('Название', max_length=255)
     director = models.ForeignKey(
         User, models.RESTRICT, 'organisations_directors',
@@ -36,6 +38,8 @@ class Organisation(InfoMixin):
 
 
 class Employee(models.Model):
+    """Модель сотрудника организации."""
+
     organisation = models.ForeignKey(
         'Organisation', models.CASCADE, 'employees_info',
     )

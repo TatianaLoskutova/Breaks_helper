@@ -47,7 +47,7 @@ class ReplacementAdmin(admin.ModelAdmin):
 @admin.register(breaks.Break)
 class BreakAdmin(admin.ModelAdmin):
     list_display = (
-        'id', 'replacement_link', 'break_start', 'break_end', 'status',
+        'id', 'replacement_link', 'break_start', 'break_end',
     )
     empty_value_display = 'Unknown'
 
