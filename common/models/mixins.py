@@ -7,9 +7,10 @@ from users.models.users import User
 class BaseDictModelMixin(models.Model):
     code = models.CharField('Код', max_length=16, primary_key=True)
     name = models.CharField('Название', max_length=32,)
-    sort = models.PositiveSmallIntegerField('Сортировка', null=True, blank=True)
+    sort = models.PositiveSmallIntegerField(
+        'Сортировка', null=True, blank=True
+    )
     is_active = models.BooleanField('Активность', default=True)
-    # color = models.CharField('Цвет', max_length=12, default='#BDECB6')
 
     class Meta:
         ordering = ('sort',)

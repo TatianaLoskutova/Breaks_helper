@@ -1,15 +1,15 @@
 from crum import get_current_user
 from django.db import transaction
-from organisations.constants import OPERATOR_POSITION
-from organisations.models.offers import Offer
-from organisations.models.organisations import Organisation
-from organisations.serializers.nested.organisations import \
-    OrganisationShortSerializer
 from rest_framework import serializers
 from rest_framework.exceptions import ParseError
 
 from common.serializers.mixins import (ExtendedModelSerializer,
                                        InfoModelSerializer)
+from organisations.constants import OPERATOR_POSITION
+from organisations.models.offers import Offer
+from organisations.models.organisations import Organisation
+from organisations.serializers.nested.organisations import \
+    OrganisationShortSerializer
 from users.models.users import User
 from users.serializers.nested.users import UserShortSerializer
 

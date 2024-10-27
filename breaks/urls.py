@@ -5,12 +5,8 @@ from breaks.views import breaks, dicts, replacements
 
 router = DefaultRouter()
 
-# router.register(r'replacements/(?P<pk>\d+)/schedule', breaks.BreakScheduleView, 'breaks-schedule')
 router.register(
     r'replacements', replacements.ReplacementView, 'replacements',
-)
-router.register(
-    r'dicts/statuses/breaks', dicts.BreakStatusView, 'breaks-statuses',
 )
 router.register(
     r'dicts/statuses/replacements', dicts.ReplacementStatusView,

@@ -14,11 +14,21 @@ from organisations.serializers.api import groups as groups_s
 
 @extend_schema_view(
     list=extend_schema(summary='Список групп', tags=['Организации: Группы']),
-    retrieve=extend_schema(summary='Деталка группы', tags=['Организации: Группы']),
-    create=extend_schema(summary='Создать группу', tags=['Организации: Группы']),
-    update=extend_schema(summary='Изменить группу', tags=['Организации: Группы']),
-    partial_update=extend_schema(summary='Изменить группу частично', tags=['Организации: Группы']),
-    update_settings=extend_schema(summary='Изменить настройки группы', tags=['Организации: Группы']),
+    retrieve=extend_schema(
+        summary='Деталка группы', tags=['Организации: Группы']
+    ),
+    create=extend_schema(
+        summary='Создать группу', tags=['Организации: Группы']
+    ),
+    update=extend_schema(
+        summary='Изменить группу', tags=['Организации: Группы']
+    ),
+    partial_update=extend_schema(
+        summary='Изменить группу частично', tags=['Организации: Группы']
+    ),
+    update_settings=extend_schema(
+        summary='Изменить настройки группы', tags=['Организации: Группы']
+    ),
 )
 class GroupView(LCRUViewSet):
     permission_classes = [IsMyGroup]
@@ -67,7 +77,9 @@ class GroupView(LCRUViewSet):
                 default=False,
             ),
             _is_member_count=Count(
-                'members', filter=(Q(members__user=self.request.user)), distinct=True,
+                'members', filter=(
+                    Q(members__user=self.request.user)
+                ), distinct=True,
             ),
             is_member=Case(
                 When(Q(_is_member_count__gt=0), then=True), default=False,

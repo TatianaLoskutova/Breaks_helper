@@ -1,8 +1,11 @@
+from django.contrib.auth import get_user_model
 from django.db import models
 from django.utils import timezone
-from organisations.managers.groups import GroupManager
 
 from common.models.mixins import InfoMixin
+from organisations.managers.groups import GroupManager
+
+User = get_user_model()
 
 
 class Group(InfoMixin):

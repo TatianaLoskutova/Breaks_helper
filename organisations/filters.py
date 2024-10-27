@@ -28,7 +28,9 @@ class EmployeeFilter(django_filters.FilterSet):
         fields = ('only_corporate',)
 
     def can_be_group_manager_filter(self, queryset, name, value):
-        return queryset.filter(position_id__in=[DIRECTOR_POSITION, MANAGER_POSITION])
+        return queryset.filter(
+            position_id__in=[DIRECTOR_POSITION, MANAGER_POSITION]
+        )
 
 
 class GroupFilter(django_filters.FilterSet):
@@ -87,8 +89,12 @@ class OfferOrgFilter(django_filters.FilterSet):
         sent_type = bool(offer_type == 'sent')
         decision_filter = {
             'accept': Q(user_accept=True) if sent_type else Q(org_accept=True),
-            'reject': Q(user_accept=False) if sent_type else Q(org_accept=False),
-            'unknown': Q(user_accept=None) if sent_type else Q(org_accept=None),
+            'reject': (
+                Q(user_accept=False) if sent_type else Q(org_accept=False)
+            ),
+            'unknown': (
+                Q(user_accept=None) if sent_type else Q(org_accept=None)
+            ),
         }
         return queryset.filter(decision_filter[value])
 
@@ -140,7 +146,11 @@ class OfferUserFilter(django_filters.FilterSet):
         sent_type = bool(offer_type == 'sent')
         decision_filter = {
             'accept': Q(user_accept=True) if sent_type else Q(org_accept=True),
-            'reject': Q(user_accept=False) if sent_type else Q(org_accept=False),
-            'unknown': Q(user_accept=None) if sent_type else Q(org_accept=None),
+            'reject': (
+                Q(user_accept=False) if sent_type else Q(org_accept=False)
+            ),
+            'unknown': (
+                Q(user_accept=None) if sent_type else Q(org_accept=None)
+            ),
         }
         return queryset.filter(decision_filter[value])

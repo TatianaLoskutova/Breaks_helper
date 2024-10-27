@@ -20,11 +20,17 @@ class OrganisationSearchView(ListViewSet):
 
 
 @extend_schema_view(
-    list=extend_schema(summary='Список организаций', tags=['Организации']),
-    retrieve=extend_schema(summary='Деталка организации', tags=['Организации']),
+    list=extend_schema(
+        summary='Список организаций', tags=['Организации']
+    ),
+    retrieve=extend_schema(
+        summary='Деталка организации', tags=['Организации']
+    ),
     create=extend_schema(summary='Создать организацию', tags=['Организации']),
     update=extend_schema(summary='Изменить организацию', tags=['Организации']),
-    partial_update=extend_schema(summary='Изменить организацию частично', tags=['Организации']),
+    partial_update=extend_schema(
+        summary='Изменить организацию частично', tags=['Организации']
+    ),
 )
 class OrganisationView(LCRUViewSet):
     permission_classes = [IsMyOrganisation]

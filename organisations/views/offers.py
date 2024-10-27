@@ -12,9 +12,16 @@ from organisations.serializers.api import offers as offers_s
 
 
 @extend_schema_view(
-    list=extend_schema(summary='Список офферов организации', tags=['Организации: Офферы']),
-    create=extend_schema(summary='Создать ооферы пользователям', tags=['Организации: Офферы']),
-    partial_update=extend_schema(summary='Изменить оффер пользователя частично', tags=['Организации: Офферы']),
+    list=extend_schema(
+        summary='Список офферов организации', tags=['Организации: Офферы'],
+    ),
+    create=extend_schema(
+        summary='Создать ооферы пользователям', tags=['Организации: Офферы'],
+    ),
+    partial_update=extend_schema(
+        summary='Изменить оффер пользователя частично',
+        tags=['Организации: Офферы'],
+    ),
 )
 class OfferOrganisationView(LCUViewSet):
     permission_classes = [IsOfferManager]
@@ -44,9 +51,16 @@ class OfferOrganisationView(LCUViewSet):
 
 
 @extend_schema_view(
-    list=extend_schema(summary='Список офферов пользователя', tags=['Организации: Офферы']),
-    create=extend_schema(summary='Создать оофер в организацию', tags=['Организации: Офферы']),
-    partial_update=extend_schema(summary='Изменить оффер в организацию частично', tags=['Организации: Офферы']),
+    list=extend_schema(
+        summary='Список офферов пользователя', tags=['Организации: Офферы']
+    ),
+    create=extend_schema(
+        summary='Создать оофер в организацию', tags=['Организации: Офферы']
+    ),
+    partial_update=extend_schema(
+        summary='Изменить оффер в организацию частично',
+        tags=['Организации: Офферы'],
+    ),
 )
 class OfferUserView(LCUViewSet):
     queryset = Offer.objects.all()

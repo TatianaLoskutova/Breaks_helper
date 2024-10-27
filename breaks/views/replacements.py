@@ -16,11 +16,11 @@ from common.views.mixins import ExtendedRetrieveUpdateAPIView, LCRUViewSet
     list=extend_schema(summary='Список смен', tags=['Обеды: Смены']),
     retrieve=extend_schema(summary='Деталка смены', tags=['Обеды: Смены']),
     create=extend_schema(summary='Создать смену', tags=['Обеды: Смены']),
-    partial_update=extend_schema(summary='Изменить смену частично', tags=['Обеды: Смены']),
+    partial_update=extend_schema(
+        summary='Изменить смену частично', tags=['Обеды: Смены']
+    ),
 )
 class ReplacementView(LCRUViewSet):
-    # permission_classes = [IsMyReplacement]
-
     queryset = Replacement.objects.all()
     serializer_class = replacements_s.ReplacementListSerializer
 
@@ -37,7 +37,7 @@ class ReplacementView(LCRUViewSet):
         OrderingFilter,
         DjangoFilterBackend,
     )
-    # filterset_class = ReplacementFilter
+    filterset_class = ReplacementFilter
 
     def get_queryset(self):
         return ReplacementFactory().list()
@@ -45,7 +45,9 @@ class ReplacementView(LCRUViewSet):
 
 @extend_schema_view(
     get=extend_schema(summary='Данные участника смены', tags=['Обеды: Смены']),
-    patch=extend_schema(summary='Изменить участника смены', tags=['Обеды: Смены']),
+    patch=extend_schema(
+        summary='Изменить участника смены', tags=['Обеды: Смены']
+    ),
 )
 class MeReplacementMemberView(ExtendedRetrieveUpdateAPIView):
     queryset = ReplacementMember.objects.all()

@@ -1,17 +1,17 @@
 
-from breaks.serializers.nested.replacements import BreakSettingsSerializer
 from crum import get_current_user
 from django.db import transaction
+from rest_framework import serializers
+from rest_framework.exceptions import ParseError
+
+from breaks.serializers.nested.replacements import BreakSettingsSerializer
+from common.serializers.mixins import (ExtendedModelSerializer,
+                                       InfoModelSerializer)
 from organisations.models.groups import Group
 from organisations.models.organisations import Organisation
 from organisations.serializers.nested.employees import EmployeeShortSerializer
 from organisations.serializers.nested.organisations import \
     OrganisationShortSerializer
-from rest_framework import serializers
-from rest_framework.exceptions import ParseError
-
-from common.serializers.mixins import (ExtendedModelSerializer,
-                                       InfoModelSerializer)
 
 
 class GroupListSerializer(InfoModelSerializer):
@@ -88,7 +88,8 @@ class GroupCreateSerializer(ExtendedModelSerializer):
         # Check manager
         if manager not in org.employees_info.all():
             raise ParseError(
-                'Администратором может быть только сотрудник организации или руководитель.'
+                'Администратором может быть только сотрудник организации или '
+                'руководитель.'
             )
 
         # Check name duplicate
@@ -113,7 +114,9 @@ class GroupUpdateSerializer(ExtendedModelSerializer):
 
     def validate(self, attrs):
         # Check name duplicate
-        if self.instance.organisation.groups.filter(name=attrs['name']).exists():
+        if self.instance.organisation.groups.filter(
+            name=attrs['name']
+        ).exists():
             raise ParseError(
                 'Группа с таким названием уже существует.'
             )

@@ -1,11 +1,11 @@
-from organisations.models.groups import Group, Member
-from organisations.models.organisations import Employee
-from organisations.serializers.nested.dicts import PositionShortSerializer
-from organisations.serializers.nested.employees import EmployeeShortSerializer
 from rest_framework import serializers
 from rest_framework.exceptions import ParseError
 
 from common.serializers.mixins import ExtendedModelSerializer
+from organisations.models.groups import Group, Member
+from organisations.models.organisations import Employee
+from organisations.serializers.nested.dicts import PositionShortSerializer
+from organisations.serializers.nested.employees import EmployeeShortSerializer
 
 
 class MemberSearchSerializer(ExtendedModelSerializer):
@@ -64,7 +64,9 @@ class MemberCreateSerializer(ExtendedModelSerializer):
             group = self.get_object_from_url(Group)
             organisation = group.organisation
         except:
-            raise ParseError('Ой, что-то не так. Текущая организация не найдена.')
+            raise ParseError(
+                'Ой, что-то не так. Текущая организация не найдена.'
+            )
 
         attrs['group'] = group
 
@@ -77,7 +79,8 @@ class MemberCreateSerializer(ExtendedModelSerializer):
         # Check employees from request exist in org
         if employees_id_set - org_employees_id_set:
             raise ParseError(
-                'Некоторые из указанных сотрдуников не существуют в организации. '
+                'Некоторые из указанных сотрдуников не существуют в '
+                'организации. '
                 'Проверьте введенные данные.'
             )
 

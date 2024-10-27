@@ -9,10 +9,22 @@ from organisations.serializers.api import members as members_s
 
 
 @extend_schema_view(
-    list=extend_schema(summary='Список участников группы', tags=['Организации: Группы: Участники']),
-    create=extend_schema(summary='Создать участника группы', tags=['Организации: Группы: Участники']),
-    destroy=extend_schema(summary='Удалить участника из группы', tags=['Организации: Группы: Участники']),
-    search=extend_schema(filters=True, summary='Список участников группы Search', tags=['Словари']),
+    list=extend_schema(
+        summary='Список участников группы',
+        tags=['Организации: Группы: Участники'],
+    ),
+    create=extend_schema(
+        summary='Создать участника группы',
+        tags=['Организации: Группы: Участники'],
+    ),
+    destroy=extend_schema(
+        summary='Удалить участника из группы',
+        tags=['Организации: Группы: Участники'],
+    ),
+    search=extend_schema(
+        filters=True, summary='Список участников группы Search',
+        tags=['Словари'],
+    ),
 )
 class MemberView(LCDViewSet):
     permission_classes = [IsMembers]

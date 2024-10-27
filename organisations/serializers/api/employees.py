@@ -1,4 +1,5 @@
 from crum import get_current_user
+from django.contrib.auth import get_user_model
 from django.db import transaction
 from rest_framework import serializers
 from rest_framework.exceptions import ParseError
@@ -8,8 +9,9 @@ from organisations.constants import OPERATOR_POSITION
 from organisations.models.dicts import Position
 from organisations.models.organisations import Employee, Organisation
 from organisations.serializers.nested.dicts import PositionShortSerializer
-from users.models.users import User
 from users.serializers.nested.users import UserEmployeeSerializer
+
+User = get_user_model()
 
 
 class EmployeeSearchSerializer(ExtendedModelSerializer):
@@ -119,7 +121,9 @@ class EmployeeUpdateSerializer(ExtendedModelSerializer):
     def validate_position(self, value):
         if value.code == OPERATOR_POSITION:
             if self.instance.is_manager:
-                employee_groups = self.instance.groups_managers.values_list('name', flat=True)
+                employee_groups = self.instance.groups_managers.values_list(
+                    'name', flat=True
+                )
                 if employee_groups:
                     error_group_text = ', '.join(employee_groups)
                     raise ParseError(
@@ -142,13 +146,18 @@ class EmployeeDeleteSerializer(serializers.Serializer):
             raise ParseError(
                 'невозможно удалить руководителя из организации.'
             )
-        groups_as_member = self.instance.groups_members.values_list('name', flat=True)
-        groups_as_manager = self.instance.groups_managers.values_list('name', flat=True)
+        groups_as_member = self.instance.groups_members.values_list(
+            'name', flat=True
+        )
+        groups_as_manager = self.instance.groups_managers.values_list(
+            'name', flat=True
+        )
         groups_exists = set(groups_as_member).union(set(groups_as_manager))
         if groups_exists:
             error_group_text = ', '.join(list(groups_exists))
             raise ParseError(
-                f'Удаление невозможно. Сотрудник находится в следующих группах '
+                f'Удаление невозможно. Сотрудник находится в следующих '
+                'группах '
                 f'менеджером в следующих группах:  {error_group_text}.'
             )
 
