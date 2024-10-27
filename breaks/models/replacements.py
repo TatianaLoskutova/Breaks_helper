@@ -65,12 +65,14 @@ class Replacement(InfoMixin):
     def __str__(self):
         return f'Смена №{self.pk} для {self.group}'
 
-    def free_breaks_available(self, break_start, break_end):
+    def free_breaks_available(
+            self, break_start, break_end, exclude_break_id=None
+            ):
 
         breaks_sub_qs = Subquery(
             Break.objects
             .filter(replacement=OuterRef('pk'))
-            # .exclude(pk=exclude_break_id)
+            .exclude(pk=exclude_break_id)
             .annotate(
                 start_datetime=(
                     ExpressionWrapper(
@@ -124,8 +126,6 @@ class Replacement(InfoMixin):
             'breaks'
         )
 
-        for record in data_seq_qs:
-            print(record)
         return data_seq_qs.first().breaks
 
     # def get_member_by_user(self, user):
