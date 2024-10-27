@@ -4,6 +4,7 @@ from django.contrib.auth import get_user_model
 from django.db import models
 from django.db.models import (Count, DateTimeField, ExpressionWrapper, F,
                               OuterRef, Q, Subquery)
+<<<<<<< HEAD
 from django.utils import timezone
 from django_generate_series.models import generate_series
 from model_utils import FieldTracker
@@ -15,7 +16,19 @@ from breaks.models.breaks import Break
 from common.models.mixins import InfoMixin
 
 User = get_user_model()
+=======
+# from django.utils import timezone
+from django_generate_series.models import generate_series
 
+# from breaks.constants import (REPLACEMENT_MEMBER_BREAK,
+#                               REPLACEMENT_MEMBER_OFFLINE,
+#                               REPLACEMENT_MEMBER_ONLINE)
+from breaks.models.breaks import Break
+from common.models.mixins import InfoMixin
+
+# from model_utils import FieldTracker
+
+>>>>>>> 0ba39a17fea372b0104344efa2c00b43cb53541b
 
 class GroupInfo(models.Model):
     """Модель инфорации о группе."""
@@ -74,6 +87,7 @@ class Replacement(InfoMixin):
     def free_breaks_available(
             self, break_start, break_end, exclude_break_id=None
             ):
+<<<<<<< HEAD
         breaks_sub_qs = Subquery(
             Break.objects
             .filter(replacement=OuterRef('pk'))
@@ -111,10 +125,60 @@ class Replacement(InfoMixin):
             )
 
         )
+=======
+
+        breaks_sub_qs = Subquery(
+            Break.objects
+            .filter(replacement=OuterRef('pk'))
+            .exclude(pk=exclude_break_id)
+            .annotate(
+                start_datetime=(
+                    ExpressionWrapper(
+                        OuterRef('date') + F('break_start'),
+                        output_field=DateTimeField()
+                    )
+                ),
+                end_datetime=(
+                    ExpressionWrapper(
+                        OuterRef('date') + F('break_end'),
+                        output_field=DateTimeField()
+                    )
+                ),
+            )
+            .filter(
+                start_datetime__lte=OuterRef('timeline'),
+                end_datetime__gt=OuterRef('timeline'),
+            )
+            .values('pk')
+        )
+
+        replacement_sub_qs = (
+            self.__class__.objects
+            .filter(pk=self.pk)
+            .annotate(timeline=OuterRef('term'))
+            .order_by()
+            .values('timeline')
+            .annotate(
+                pk=F('pk'),
+                breaks=Count(
+                    'breaks', filter=Q(breaks__id__in=breaks_sub_qs),
+                    distinct=True
+                ),
+                members_count=Count('members', distinct=True),
+                free_breaks=F('members_count') - F('breaks')
+            )
+
+        )
+
+>>>>>>> 0ba39a17fea372b0104344efa2c00b43cb53541b
         start_datetime = datetime.combine(self.date, break_start)
         end_datetime = datetime.combine(
             self.date, break_end
         ) - timedelta(minutes=15)
+<<<<<<< HEAD
+=======
+
+>>>>>>> 0ba39a17fea372b0104344efa2c00b43cb53541b
         data_seq_qs = generate_series(
             start_datetime, end_datetime, '15 minutes',
             output_field=DateTimeField
@@ -123,6 +187,10 @@ class Replacement(InfoMixin):
         ).order_by(
             'breaks'
         )
+<<<<<<< HEAD
+=======
+
+>>>>>>> 0ba39a17fea372b0104344efa2c00b43cb53541b
         return data_seq_qs.first().breaks
 
     def get_member_by_user(self, user):

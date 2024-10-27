@@ -36,7 +36,7 @@ INSTALLED_APPS += [
     'djoser',
     'phonenumber_field',
     'django_extensions',
-    # 'django_generate_series',
+    'django_generate_series',
     # 'debug_toolbar',
 ]
 
