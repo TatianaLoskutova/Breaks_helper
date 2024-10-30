@@ -227,39 +227,6 @@ SIMPLE_JWT = {
 
 INTERNAL_IPS = ['127.0.0.1',]
 
-# LOGGING = {
-#     'version': 1,
-#     'disable_existing_loggers': False,
-#     'formatters': {
-#         'verbose': {
-#             'format': '{levelname} {asctime} {module} {message}',
-#             'style': '{',
-#         },
-#         'logstash': {
-#             'format': '%(asctime)s [%(levelname)s] %(name)s: %(message)s',
-#         },
-#         'json': {
-#             '()': 'pythonjsonlogger.jsonlogger.JsonFormatter',
-#             'format': '%(asctime)s %(levelname)s %(message)s',
-#             'json_indent': None,
-#         },
-#     },
-#     'handlers': {
-#         'console': {
-#             'class': 'logging.StreamHandler',
-#             'formatter': 'verbose',
-#         },
-#         'logstash': {
-#             'level': 'INFO',
-#             # 'formatter': 'json',
-#             'class': 'logstash.TCPLogstashHandler',
-#             'host': 'localhost',
-#             'port': 50000, # Default value: 5959
-#             'version': 1,
-#             'message_type': 'django',
-#             'fqdn': False, # Fully qualified domain name. Default value: false.
-#             'tags': ['django.request'], # list of tags. Default: None.
-#         },
 
 #     },
 #     'loggers': {
