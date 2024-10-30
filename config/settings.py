@@ -71,7 +71,6 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'crum.CurrentRequestUserMiddleware',
     'auditlog.middleware.AuditlogMiddleware',
-    # 'request_logging.middleware.LoggingMiddleware',
 ]
 
 REST_FRAMEWORK = {
