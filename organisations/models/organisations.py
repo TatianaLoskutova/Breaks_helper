@@ -1,4 +1,4 @@
-# from auditlog.registry import auditlog
+from auditlog.registry import auditlog
 from django.db import models
 from django.utils import timezone
 
@@ -79,4 +79,4 @@ class Employee(models.Model):
         return False
 
 
-# auditlog.register(Organisation)
+auditlog.register(Organisation)

@@ -29,7 +29,7 @@ INSTALLED_APPS = [
 
 # packages
 INSTALLED_APPS += [
-    # 'auditlog',
+    'auditlog',
     'rest_framework',
     'django_filters',
     'corsheaders',
@@ -70,7 +70,7 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'crum.CurrentRequestUserMiddleware',
-    # 'auditlog.middleware.AuditlogMiddleware',
+    'auditlog.middleware.AuditlogMiddleware',
     # 'request_logging.middleware.LoggingMiddleware',
 ]
 
