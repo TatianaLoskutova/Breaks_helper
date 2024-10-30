@@ -226,23 +226,3 @@ SIMPLE_JWT = {
 }
 
 INTERNAL_IPS = ['127.0.0.1',]
-
-
-#     },
-#     'loggers': {
-#         'django.request': {
-#             'handlers': ['console', 'logstash'],
-#             'level': 'DEBUG',
-#             'propagate': False,
-#         },
-#         'request_logging': {
-#             'handlers': ['console', 'logstash'],
-#             'level': 'DEBUG',
-#             'propagate': False,
-#         },
-#     },
-#     'root': {
-#         'handlers': ['console'],
-#         'level': 'INFO',
-#     },
-# }
