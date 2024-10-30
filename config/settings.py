@@ -54,7 +54,6 @@ AUTH_USER_MODEL = 'users.User'
 # Custom backend
 AUTHENTICATION_BACKENDS = ('users.backends.AuthBackend',)
 
-# after apps
 INSTALLED_APPS += [
     'drf_spectacular',
 ]
