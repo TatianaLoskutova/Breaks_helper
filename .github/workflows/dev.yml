@@ -24,8 +24,8 @@ jobs:
         script: |
           # Выполняет деплой
           cd ${{ secrets.PATH }}
-          git pull –no-rebase
           source venv/bin/activate
+          git pull –no-rebase
           pip install -r requirements.txt
           python manage.py makemigrations
           python manage.py migrate
