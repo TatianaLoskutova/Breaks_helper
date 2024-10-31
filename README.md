@@ -1,10 +1,12 @@
 ## Разработчик проекта: Лоскутова Татьяна (Loskutova Tatiana)
 
 ### Ссылки на задеполенный API в сети:
-Backend Api: api.dev.tanishahelper.ru/api/
+- Backend Api: api.dev.tanishahelper.ru/api/
+- Backend admin: api.dev.tanishahelper.ru/admin/
 
-admin@gmail.com
-Loskutidze1988
+Данные для входа в админку и ознакомления с проектом:
+- admin@gmail.com
+- Loskutidze1988
 
 ### Технологический стек
 - Python - основной язык программирования.
