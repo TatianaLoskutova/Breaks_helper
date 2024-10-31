@@ -1,6 +1,12 @@
 # Breaks Helper
 > API Сервис для организации работы сотрудников
 
+# Ссылки на задеполенный API в сети:
+Backend Api: api.dev.tanishahelper.ru/api/
+
+admin@gmail.com
+Loskutidze1988
+
 # Установка проекта в Docker
 1. Создание образа и запуск
 ```
